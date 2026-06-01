@@ -57,19 +57,7 @@ function toggle(i) {
   }
 }
 
-grid.ontouchend = function(e) {
-  var el = e.target;
-  while (el && el !== grid) {
-    if (el.getAttribute('data-i') !== null) {
-      e.preventDefault();
-      toggle(parseInt(el.getAttribute('data-i')));
-      return;
-    }
-    el = el.parentNode;
-  }
-};
-
-grid.onclick = function(e) {
+grid.ondblclick = function(e) {
   var el = e.target;
   while (el && el !== grid) {
     if (el.getAttribute('data-i') !== null) {
@@ -97,8 +85,7 @@ function tick() {
   requestAnimationFrame(tick);
 }
 
-document.getElementById('btnReset').ontouchend = function(e) { e.preventDefault(); doReset(); };
-document.getElementById('btnReset').onclick = doReset;
+document.getElementById('btnReset').ondblclick = doReset;
 function doReset() {
   for (var i = 0; i < elapsed.length; i++) {
     elapsed[i] = 0;
