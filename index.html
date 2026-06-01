@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Soccer Play Timer</title>
+</head>
+<body style="font-family:-apple-system,sans-serif;background:#1a1a2e;padding:12px;margin:0;">
+<h1 style="color:#fff;text-align:center;font-size:1.2rem;margin:0 0 12px 0;">⚽ Play Timer</h1>
+<div style="text-align:center;margin-bottom:12px;">
+<button id="btnReset" style="background:#0f3460;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:1rem;">Reset</button>
+</div>
+<div id="grid" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;"></div>
+
+<script>
+var names = ['Player 1','Player 2','Player 3','Player 4','Player 5','Player 6','Player 7','Player 8','Player 9','Player 10','Player 11'];
+var elapsed = [];
+var active = [];
+var timeEls = [];
+var cardEls = [];
+var grid = document.getElementById('grid');
+
+for (var i = 0; i < names.length; i++) {
+  elapsed.push(0);
+  active.push(false);
+
+  var div = document.createElement('div');
+  div.setAttribute('data-i', i);
+  div.style.cssText = 'background:#16213e;border:2px solid #0f3460;border-radius:12px;padding:14px 10px;text-align:center;width:30%;min-width:100px;';
+
+  var nameDiv = document.createElement('div');
+  nameDiv.style.cssText = 'color:#fff;font-weight:600;font-size:1rem;margin-bottom:6px;';
+  nameDiv.textContent = names[i];
+
+  var timeDiv = document.createElement('div');
+  timeDiv.style.cssText = 'color:#adb5bd;font-size:1.4rem;';
+  timeDiv.textContent = '0:00';
+
+  div.appendChild(nameDiv);
+  div.appendChild(timeDiv);
+  grid.appendChild(div);
+
+  timeEls.push(timeDiv);
+  cardEls.push(div);
+}
+
+function toggle(i) {
+  active[i] = !active[i];
+  if (active[i]) {
+    cardEls[i].style.background = '#1b4332';
+    cardEls[i].style.borderColor = '#40916c';
+    timeEls[i].style.color = '#95d5b2';
+  } else {
+    cardEls[i].style.background = '#16213e';
+    cardEls[i].style.borderColor = '#0f3460';
+    timeEls[i].style.color = '#adb5bd';
+  }
+}
+
+grid.ontouchend = function(e) {
+  var el = e.target;
+  while (el && el !== grid) {
+    if (el.getAttribute('data-i') !== null) {
+      e.preventDefault();
+      toggle(parseInt(el.getAttribute('data-i')));
+      return;
+    }
+    el = el.parentNode;
+  }
+};
+
+grid.onclick = function(e) {
+  var el = e.target;
+  while (el && el !== grid) {
+    if (el.getAttribute('data-i') !== null) {
+      toggle(parseInt(el.getAttribute('data-i')));
+      return;
+    }
+    el = el.parentNode;
+  }
+};
+
+var lastTick = Date.now();
+function tick() {
+  var now = Date.now();
+  var dt = now - lastTick;
+  lastTick = now;
+  for (var i = 0; i < elapsed.length; i++) {
+    if (active[i]) {
+      elapsed[i] += dt;
+      var s = Math.floor(elapsed[i] / 1000);
+      var m = Math.floor(s / 60);
+      var sec = s % 60;
+      timeEls[i].textContent = m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+document.getElementById('btnReset').ontouchend = function(e) { e.preventDefault(); doReset(); };
+document.getElementById('btnReset').onclick = doReset;
+function doReset() {
+  for (var i = 0; i < elapsed.length; i++) {
+    elapsed[i] = 0;
+    active[i] = false;
+    timeEls[i].textContent = '0:00';
+    timeEls[i].style.color = '#adb5bd';
+    cardEls[i].style.background = '#16213e';
+    cardEls[i].style.borderColor = '#0f3460';
+  }
+}
+
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
