@@ -25,6 +25,14 @@ table.stats tr:nth-child(odd){background:#151515}
 .toggle-btn .side-plus:active{background:#2d6b4a}
 .toggle-btn .divider{width:1px;height:100%;background:#555}
 .btn-action{background:#0f3460;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:1rem;cursor:pointer;margin:4px}
+
+/* Lineup tab */
+.lineup-table{width:100%;border-collapse:collapse;font-size:0.9rem}
+.lineup-table th{background:#333;padding:8px;border-bottom:2px solid #555}
+.lineup-table td{padding:6px 8px;border-bottom:1px solid #2a2a2a}
+.lineup-table tr:nth-child(even){background:#1a1a1a}
+.lineup-table tr:nth-child(odd){background:#151515}
+.lineup-table select{background:#333;color:#fff;border:1px solid #555;border-radius:6px;padding:8px 12px;font-size:0.9rem;width:100%;-webkit-appearance:none;appearance:none}
 /* Timer tab */
 .timer-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .timer-card{background:#16213e;border:2px solid #0f3460;border-radius:12px;padding:14px 10px;text-align:center;width:30%;min-width:100px}
@@ -34,6 +42,7 @@ table.stats tr:nth-child(odd){background:#151515}
 
 <div class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('stats')">📊 Stats</button>
+  <button class="tab-btn" onclick="switchTab('lineup')">📋 Lineup</button>
   <button class="tab-btn" onclick="switchTab('timer')">⏱️ Play Timer</button>
 </div>
 
@@ -41,7 +50,7 @@ table.stats tr:nth-child(odd){background:#151515}
 <div id="tab-stats" class="tab-content active">
 <div style="padding:4px 8px">
 <button class="btn-action" onclick="expCSV()">Export CSV</button>
-<button class="btn-action" onclick="if(confirm('Reset all stats?')){try{_ls.removeItem('soccer');_ls.removeItem('log');}catch(e){}data={};log=[];render();renderLog()}">Reset</button>
+<button class="btn-action" onclick="if(confirm('Reset all stats?')){try{_ls.removeItem('soccer');_ls.removeItem('log');_ls.removeItem('statHistory');}catch(e){}data={};log=[];window._statHistory=[];render();renderLog()}">Reset</button>
 </div>
 <div class="stats-wrap">
 <table class="stats">
@@ -62,7 +71,7 @@ table.stats tr:nth-child(odd){background:#151515}
 <tr><td class='player-name'>#19 Mei</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Defensive_Stops',1)"><b class='val' id='12_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Shots_Stopped',1)"><b class='val' id='12_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'50/50_Wins',1)"><b class='val' id='12_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Steals',1)"><b class='val' id='12_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Shots_on_Goal',1)"><b class='val' id='12_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Assists',1)"><b class='val' id='12_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Through_Balls',1)"><b class='val' id='12_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Switch_Field',1)"><b class='val' id='12_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(12,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(12,'Crosses',1)"><b class='val' id='12_Crosses'>0</b></div></div></td></tr>
 <tr><td class='player-name'>#24 Kalea</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Defensive_Stops',1)"><b class='val' id='13_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Shots_Stopped',1)"><b class='val' id='13_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'50/50_Wins',1)"><b class='val' id='13_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Steals',1)"><b class='val' id='13_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Shots_on_Goal',1)"><b class='val' id='13_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Assists',1)"><b class='val' id='13_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Through_Balls',1)"><b class='val' id='13_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Switch_Field',1)"><b class='val' id='13_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(13,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(13,'Crosses',1)"><b class='val' id='13_Crosses'>0</b></div></div></td></tr>
 <tr><td class='player-name'>#28 Lu</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Defensive_Stops',1)"><b class='val' id='14_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Shots_Stopped',1)"><b class='val' id='14_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'50/50_Wins',1)"><b class='val' id='14_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Steals',1)"><b class='val' id='14_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Shots_on_Goal',1)"><b class='val' id='14_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Assists',1)"><b class='val' id='14_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Through_Balls',1)"><b class='val' id='14_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Switch_Field',1)"><b class='val' id='14_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(14,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(14,'Crosses',1)"><b class='val' id='14_Crosses'>0</b></div></div></td></tr>
-<tr><td class='player-name'>#33 Aria</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Defensive_Stops',1)"><b class='val' id='15_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Shots_Stopped',1)"><b class='val' id='15_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'50/50_Wins',1)"><b class='val' id='15_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Steals',1)"><b class='val' id='15_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Shots_on_Goal',1)"><b class='val' id='15_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Assists',1)"><b class='val' id='15_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Through_Balls',1)"><b class='val' id='15_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Switch_Field',1)"><b class='val' id='15_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Crosses',1)"><b class='val' id='15_Crosses'>0</b></div></div></td></tr>
+<tr><td class='player-name'>#22 Aria</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Defensive_Stops',1)"><b class='val' id='15_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Shots_Stopped',1)"><b class='val' id='15_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'50/50_Wins',1)"><b class='val' id='15_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Steals',1)"><b class='val' id='15_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Shots_on_Goal',1)"><b class='val' id='15_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Assists',1)"><b class='val' id='15_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Through_Balls',1)"><b class='val' id='15_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Switch_Field',1)"><b class='val' id='15_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(15,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(15,'Crosses',1)"><b class='val' id='15_Crosses'>0</b></div></div></td></tr>
 <tr><td class='player-name'>#37 Alannah</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Defensive_Stops',1)"><b class='val' id='16_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Shots_Stopped',1)"><b class='val' id='16_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'50/50_Wins',1)"><b class='val' id='16_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Steals',1)"><b class='val' id='16_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Shots_on_Goal',1)"><b class='val' id='16_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Assists',1)"><b class='val' id='16_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Through_Balls',1)"><b class='val' id='16_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Switch_Field',1)"><b class='val' id='16_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(16,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(16,'Crosses',1)"><b class='val' id='16_Crosses'>0</b></div></div></td></tr>
 <tr><td class='player-name'>#68 SoSo</td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Defensive_Stops',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Defensive_Stops',1)"><b class='val' id='17_Defensive_Stops'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Shots_Stopped',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Shots_Stopped',1)"><b class='val' id='17_Shots_Stopped'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'50/50_Wins',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'50/50_Wins',1)"><b class='val' id='17_50/50_Wins'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Steals',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Steals',1)"><b class='val' id='17_Steals'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Shots_on_Goal',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Shots_on_Goal',1)"><b class='val' id='17_Shots_on_Goal'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Assists',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Assists',1)"><b class='val' id='17_Assists'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Through_Balls',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Through_Balls',1)"><b class='val' id='17_Through_Balls'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Switch_Field',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Switch_Field',1)"><b class='val' id='17_Switch_Field'>0</b></div></div></td><td><div class='toggle-btn'><div class='side side-minus' onclick="chg(17,'Crosses',-1)">&nbsp;</div><div class='divider'></div><div class='side side-plus' onclick="chg(17,'Crosses',1)"><b class='val' id='17_Crosses'>0</b></div></div></td></tr>
 
@@ -70,6 +79,22 @@ table.stats tr:nth-child(odd){background:#151515}
 </table>
 </div>
 
+</div>
+
+
+<!-- LINEUP TAB -->
+<div id="tab-lineup" class="tab-content">
+<h2 style="padding:0 12px;color:#fff;font-size:1.2rem;">📋 Game Lineup</h2>
+<div style="padding:0 12px;margin-bottom:8px;">
+<button class="btn-action" onclick="saveLineup()">Save</button>
+<button class="btn-action" onclick="clearLineup()">Clear All</button>
+</div>
+<div style="padding:0 12px;">
+<table class="lineup-table">
+<thead><tr><th style="text-align:left;padding:8px;">Player</th><th style="text-align:left;padding:8px;">Position</th></tr></thead>
+<tbody id="lineup-body"></tbody>
+</table>
+</div>
 </div>
 
 <!-- TIMER TAB -->
@@ -89,7 +114,8 @@ function switchTab(tab) {
   document.getElementById('tab-'+tab).classList.add('active');
   var btns=document.querySelectorAll('.tab-btn');
   if(tab==='stats') btns[0].classList.add('active');
-  else btns[1].classList.add('active');
+  else if(tab==='lineup') btns[1].classList.add('active');
+  else btns[2].classList.add('active');
 }
 </script>
 
@@ -99,6 +125,8 @@ var _ls={getItem:function(k){return null;},setItem:function(){},removeItem:funct
 try{if(window.localStorage){_ls=window.localStorage;}}catch(e){}
 var stats_list=['Defensive_Stops','Shots_Stopped','50/50_Wins','Steals','Shots_on_Goal','Assists','Through_Balls','Switch_Field','Crosses'];
 var data={};var log=[];
+window._statHistory=[];
+try{window._statHistory=JSON.parse(_ls.getItem('statHistory')||'[]');}catch(e){window._statHistory=[];}
 try{data=JSON.parse(_ls.getItem('soccer')||'{}');}catch(e){data={};}
 try{log=JSON.parse(_ls.getItem('log')||'[]');}catch(e){log=[];}
 function chg(i,k,d){data[i]=data[i]||{};data[i][k]=Math.max(0,(data[i][k]||0)+d);document.getElementById(i+'_'+k).textContent=data[i][k];
@@ -106,8 +134,41 @@ log.unshift(new Date().toLocaleTimeString()+' Player '+i+' '+k+' '+(d>0?'+':'-')
 function save(){try{_ls.setItem('soccer',JSON.stringify(data));_ls.setItem('log',JSON.stringify(log));}catch(e){}}
 function render(){var els=document.querySelectorAll('#tab-stats .val');for(var x=0;x<els.length;x++){var id=els[x].id;if(id){var parts=id.split('_');var i=parts[0];var k=parts.slice(1).join('_');if(data[i]&&data[i][k]!==undefined){els[x].textContent=data[i][k];}else{els[x].textContent='0';}}}}
 function renderLog(){}
-function expCSV(){var out='Player,Number,Defensive Stops,Shots Stopped,50/50 Wins,Steals,Shots on Goal,Assists,Through Balls,Switch Field,Crosses\n';var players=[['Hannah','2'],['Nora','3'],['Keller','5'],['Adelle','7'],['Raina','8'],['Lucy','9'],['Bixby','10'],['Adelaide','11'],['Reese','12'],['Finot','13'],['Asa','15'],['Cat','17'],['Mei','19'],['Kalea','24'],['Lu','28'],['Aria','33'],['Alannah','37'],['SoSo','68']];
-players.forEach(function(p,i){var r=[p[0],p[1]];stats_list.forEach(function(s){r.push((data[i]&&data[i][s])||0);});out+=r.join(',')+'\n';});
+function expCSV(){
+var header='Player,Number,Position,Playing Time,Defensive Stops,Shots Stopped,50/50 Wins,Steals,Shots on Goal,Assists,Through Balls,Switch Field,Crosses\n';
+var history=window._statHistory||[];
+var players=[['Hannah','2'],['Nora','3'],['Keller','5'],['Adelle','7'],['Raina','8'],['Lucy','9'],['Bixby','10'],['Adelaide','11'],['Reese','12'],['Finot','13'],['Asa','15'],['Cat','17'],['Mei','19'],['Kalea','24'],['Lu','28'],['Aria','22'],['Alannah','37'],['SoSo','68']];
+var lineup={};try{lineup=JSON.parse(_ls.getItem('lineup')||'{}');}catch(e){}
+var timerMap={};
+if(window._timerElapsed&&window._timerElapsed.length>0){
+var timerNames=['Adelaide #11','Bixby #10','Adelle #7','Alannah #37','Aria #22','Asa #15','Cat #17','Finot #13','Hannah #2','Kalea #24','Keller #5','Lu #28','Lucy #9','Mei #19','Nora #3','Raina #8','Reese #12','SoSo #68'];
+for(var t=0;t<timerNames.length;t++){var tn=timerNames[t].match(/#(\d+)/);if(tn)timerMap[tn[1]]=window._timerElapsed[t]||0;}
+}else{
+var timerCards=document.querySelectorAll('#timer-grid .timer-card');
+for(var t=0;t<timerCards.length;t++){var nm=timerCards[t].querySelector('.timer-name');var tm=timerCards[t].querySelector('.timer-time');if(nm&&tm){var num=nm.textContent.match(/#(\d+)/);if(num){var parts=tm.textContent.split(':');timerMap[num[1]]=(parseInt(parts[0]||0)*60+parseInt(parts[1]||0))*1000;}}}
+}
+var out=header;
+players.forEach(function(p,i){
+  // First output any banked (previous position) rows for this player
+  history.forEach(function(h){
+    if(h.player===i){
+      var ms=h.elapsed||0;
+      var secs=Math.floor(ms/1000);var mins=Math.floor(secs/60);var sec=secs%60;
+      var timeStr=mins+':'+(sec<10?'0':'')+sec;
+      var r=[p[0],p[1],h.position,timeStr];
+      stats_list.forEach(function(s){r.push((h.stats&&h.stats[s])||0);});
+      out+=r.join(',')+'\n';
+    }
+  });
+  // Then output current position row
+  var pos=lineup[i]||'';
+  var ms=timerMap[p[1]]||0;
+  var secs=Math.floor(ms/1000);var mins=Math.floor(secs/60);var sec=secs%60;
+  var timeStr=mins+':'+(sec<10?'0':'')+sec;
+  var r=[p[0],p[1],pos,timeStr];
+  stats_list.forEach(function(s){r.push((data[i]&&data[i][s])||0);});
+  out+=r.join(',')+'\n';
+});
 var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/csv'}));a.download='soccer_stats.csv';a.click();}
 render();
 </script>
@@ -117,6 +178,7 @@ render();
 (function(){
 var names=['Adelaide #11','Bixby #10','Adelle #7','Alannah #37','Aria #22','Asa #15','Cat #17','Finot #13','Hannah #2','Kalea #24','Keller #5','Lu #28','Lucy #9','Mei #19','Nora #3','Raina #8','Reese #12','SoSo #68'];
 var elapsed=[];var active=[];var timeEls=[];var cardEls=[];
+window._timerElapsed=elapsed;
 var grid=document.getElementById('timer-grid');
 for(var i=0;i<names.length;i++){
   elapsed.push(0);active.push(false);
@@ -144,6 +206,86 @@ document.getElementById('btnTimerReset').onclick=function(){
   for(var i=0;i<elapsed.length;i++){elapsed[i]=0;active[i]=false;timeEls[i].textContent='0:00';timeEls[i].style.color='#adb5bd';cardEls[i].style.background='#16213e';cardEls[i].style.borderColor='#0f3460';}
 };
 requestAnimationFrame(tick);
+})();
+</script>
+
+<!-- LINEUP SCRIPT -->
+<script>
+(function(){
+var players=[
+{id:0,name:'#2 Hannah'},{id:1,name:'#3 Nora'},{id:2,name:'#5 Keller'},
+{id:3,name:'#7 Adelle'},{id:4,name:'#8 Raina'},{id:5,name:'#9 Lucy'},
+{id:6,name:'#10 Bixby'},{id:7,name:'#11 Adelaide'},{id:8,name:'#12 Reese'},
+{id:9,name:'#13 Finot'},{id:10,name:'#15 Asa'},{id:11,name:'#17 Cat'},
+{id:12,name:'#19 Mei'},{id:13,name:'#24 Kalea'},{id:14,name:'#28 Lu'},
+{id:15,name:'#22 Aria'},{id:16,name:'#37 Alannah'},{id:17,name:'#68 SoSo'}
+];
+var positions=['','GK','Striker','Wide-Left Mid','Center-Mid','Wide-Right Mid','Left Mid','Right Mid','Left Back','L-Center Back','R-Center Back','Right Back'];
+var defaultLineup={0:'L-Center Back',1:'Left Mid',2:'Wide-Left Mid',3:'Right Mid',4:'Left Mid',5:'Striker',6:'Center-Mid',7:'Left Mid',8:'Center-Mid',9:'Right Back',10:'Right Mid',11:'R-Center Back',12:'Striker',13:'Right Back',14:'Wide-Left Mid',15:'Wide-Right Mid',16:'Left Mid',17:'Left Back'};
+var lineup={};
+try{lineup=JSON.parse(_ls.getItem('lineup')||'{}');}catch(e){lineup={};}
+// Apply defaults for any player without a saved position
+for(var dk in defaultLineup){if(!lineup[dk])lineup[dk]=defaultLineup[dk];}
+
+var tbody=document.getElementById('lineup-body');
+players.forEach(function(p){
+  var tr=document.createElement('tr');
+  var tdName=document.createElement('td');
+  tdName.style.fontWeight='600';
+  tdName.textContent=p.name;
+  var tdPos=document.createElement('td');
+  var sel=document.createElement('select');
+  sel.id='pos_'+p.id;
+  positions.forEach(function(pos){
+    var opt=document.createElement('option');
+    opt.value=pos;
+    opt.textContent=pos||'— Select —';
+    if(lineup[p.id]===pos) opt.selected=true;
+    sel.appendChild(opt);
+  });
+  sel.onchange=function(){
+  var oldPos=lineup[p.id]||'';
+  var newPos=sel.value;
+  if(oldPos&&oldPos!==newPos){
+    // Bank current stats under old position
+    if(!window._statHistory) window._statHistory=[];
+    var playerNums={0:'2',1:'3',2:'5',3:'7',4:'8',5:'9',6:'10',7:'11',8:'12',9:'13',10:'15',11:'17',12:'19',13:'24',14:'28',15:'22',16:'37',17:'68'};
+    var timerNumToIdx={'11':0,'10':1,'7':2,'37':3,'22':4,'15':5,'17':6,'13':7,'2':8,'24':9,'5':10,'28':11,'9':12,'19':13,'3':14,'8':15,'12':16,'68':17};
+    var pNum=playerNums[p.id];
+    var tIdx=timerNumToIdx[pNum];
+    var elapsedMs=0;
+    if(window._timerElapsed&&tIdx!==undefined) elapsedMs=window._timerElapsed[tIdx]||0;
+    var banked={player:p.id,position:oldPos,stats:JSON.parse(JSON.stringify(data[p.id]||{})),elapsed:elapsedMs};
+    window._statHistory.push(banked);
+    try{_ls.setItem('statHistory',JSON.stringify(window._statHistory));}catch(e){}
+    // Reset player stats and timer
+    data[p.id]={};
+    if(window._timerElapsed&&tIdx!==undefined) window._timerElapsed[tIdx]=0;
+    // Update timer display
+    var timerCards=document.querySelectorAll('#timer-grid .timer-card');
+    if(timerCards[tIdx]){var tm=timerCards[tIdx].querySelector('.timer-time');if(tm)tm.textContent='0:00';}
+    render();
+    save();
+  }
+  lineup[p.id]=newPos;
+};
+  tdPos.appendChild(sel);
+  tr.appendChild(tdName);
+  tr.appendChild(tdPos);
+  tbody.appendChild(tr);
+});
+
+window.saveLineup=function(){
+  try{_ls.setItem('lineup',JSON.stringify(lineup));}catch(e){}
+  alert('Lineup saved!');
+};
+window.clearLineup=function(){
+  if(!confirm('Clear all positions?')) return;
+  lineup={};
+  try{_ls.removeItem('lineup');}catch(e){}
+  var sels=tbody.querySelectorAll('select');
+  for(var i=0;i<sels.length;i++) sels[i].selectedIndex=0;
+};
 })();
 </script>
 </body></html>
