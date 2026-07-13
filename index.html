@@ -27,6 +27,11 @@ table.stats tr:nth-child(odd){background:#151515}
 .player-name .timer-display{font-size:0.7rem;color:#95d5b2;font-weight:normal;display:block;margin-top:1px}
 .player-col{text-align:left!important;padding-left:6px!important;position:sticky;left:0;background:#333;z-index:5;min-width:110px}
 .val{font-size:0.85rem;font-weight:bold;color:#fff}
+.val.highlight-up{animation:flash-green 1.2s ease-out}
+.val.highlight-down{animation:flash-red 1.2s ease-out}
+.val.last-changed{color:#00e676;font-size:1.1rem;text-shadow:0 0 10px #00e676,0 0 20px rgba(0,230,118,0.5);background:rgba(0,230,118,0.2);border-radius:4px;padding:2px 4px}
+@keyframes flash-green{0%{color:#00e676;text-shadow:0 0 25px #00e676;transform:scale(1.8)}100%{color:#00e676;text-shadow:0 0 10px #00e676,0 0 20px rgba(0,230,118,0.5);transform:scale(1)}}
+@keyframes flash-red{0%{color:#ff5252;text-shadow:0 0 25px #ff5252;transform:scale(1.8)}100%{color:#00e676;text-shadow:0 0 10px #00e676,0 0 20px rgba(0,230,118,0.5);transform:scale(1)}}
 .toggle-btn{display:flex;border-radius:4px;overflow:hidden;border:1px solid #555;width:52px;height:24px;-webkit-tap-highlight-color:transparent}
 .toggle-btn .side{flex:1;height:100%;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;transition:background .1s}
 .toggle-btn .side-minus{background:#4a2020}
@@ -197,6 +202,15 @@ function renderEventLog(){
 try{data=JSON.parse(_ls.getItem('soccer')||'{}');}catch(e){data={};}
 try{log=JSON.parse(_ls.getItem('log')||'[]');}catch(e){log=[];}
 function chg(i,k,d){data[i]=data[i]||{};data[i][k]=Math.max(0,(data[i][k]||0)+d);document.getElementById(i+'_'+k).textContent=data[i][k];
+// Clear previous highlight
+var prevHL=document.querySelector('.val.last-changed');
+if(prevHL){prevHL.classList.remove('last-changed','highlight-up','highlight-down');}
+// Highlight the new change
+var el=document.getElementById(i+'_'+k);
+el.classList.remove('highlight-up','highlight-down');
+void el.offsetWidth;
+el.classList.add(d>0?'highlight-up':'highlight-down');
+el.classList.add('last-changed');
 var pnameEl=document.querySelector('#pname_'+i+' .pname-text');
 var pname=pnameEl?pnameEl.textContent:('Player '+i);
 var statName=k.replace(/_/g,' ');
