@@ -50,6 +50,8 @@ table.stats.full-width .toggle-btn{width:calc(40px + 1.5vw);height:calc(20px + 0
 table.stats.full-width .toggle-btn .side-plus{min-width:calc(20px + 0.8vw)}
 table.stats.full-width tr td{padding:2px 2px}
 .btn-expand{background:#37474f;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:1rem;cursor:pointer;margin:4px}
+#mic-btn.mic-active{background:#d32f2f;animation:mic-pulse 1s infinite alternate}
+@keyframes mic-pulse{from{box-shadow:0 0 4px #b71c1c}to{box-shadow:0 0 14px #ff5252}}
 
 /* Lineup tab */
 .lineup-table{width:100%;border-collapse:collapse;font-size:0.9rem}
@@ -74,6 +76,9 @@ table.stats.full-width tr td{padding:2px 2px}
 <button class="btn-sub" id="sub-btn" onclick="doSub()">🔄 Sub</button>
 <span id="sub-status"></span>
 <button class="btn-expand" id="expand-btn" onclick="toggleFullWidth()">⛶ Expand</button>
+<button class="btn-action" id="mic-btn" onclick="toggleMic()" style="background:#b71c1c;">🎤 Voice</button>
+<span id="mic-status" style="font-size:0.75rem;color:#888;margin-left:4px;"></span>
+<div id="last-voice-cmd" style="font-size:0.7rem;color:#666;padding:2px 8px;display:none;"></div>
 </div>
 <div class="stats-wrap">
 <table class="stats">
@@ -639,4 +644,145 @@ function renderFormation(val){
 </script>
 
 <script>if(typeof renderEventLog==='function')renderEventLog();</script>
+
+<!-- SPEECH-TO-TEXT FOR STATS -->
+<script>
+(function(){
+var SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+var micActive=false;
+var recognition=null;
+
+if(!SpeechRecognition){
+  document.getElementById('mic-btn').style.display='none';
+}else{
+  recognition=new SpeechRecognition();
+  recognition.continuous=true;
+  recognition.interimResults=false;
+  recognition.lang='en-US';
+
+  recognition.onstart=function(){
+    document.getElementById('mic-status').textContent='Listening...';
+    document.getElementById('mic-status').style.color='#4caf50';
+    document.getElementById('mic-btn').classList.add('mic-active');
+  };
+  recognition.onend=function(){
+    document.getElementById('mic-status').textContent='';
+    document.getElementById('mic-btn').classList.remove('mic-active');
+    // Auto-restart if still active (browser may stop after silence)
+    if(micActive){try{recognition.start();}catch(e){}}
+  };
+  recognition.onerror=function(e){
+    if(e.error==='no-speech')return; // ignore silence
+    console.log('Speech error:',e.error);
+    if(e.error==='not-allowed'){
+      document.getElementById('mic-status').textContent='Mic blocked';
+      document.getElementById('mic-status').style.color='#ff5252';
+      micActive=false;
+    }
+  };
+  recognition.onresult=function(event){
+    var text=event.results[event.results.length-1][0].transcript.toLowerCase().trim();
+    var rawText=event.results[event.results.length-1][0].transcript.trim();
+    document.getElementById('last-voice-cmd').style.display='block';
+    document.getElementById('last-voice-cmd').textContent='🎤 "'+rawText+'"';
+    parseVoiceCommand(text,rawText);
+  };
+}
+
+window.toggleMic=function(){
+  if(!recognition)return;
+  micActive=!micActive;
+  if(micActive){
+    try{recognition.start();}catch(e){recognition.stop();setTimeout(function(){recognition.start();},200);}
+  }else{
+    recognition.stop();
+    document.getElementById('mic-status').textContent='';
+    document.getElementById('mic-btn').classList.remove('mic-active');
+    document.getElementById('last-voice-cmd').style.display='none';
+  }
+};
+
+// Player name aliases for voice recognition
+var voicePlayerMap={
+  'adelaide':7,'adele':7,'adelaide\'s':7,
+  'adelle':3,'adell':3,'a dell':3,
+  'alana':16,'alannah':16,'alanna':16,
+  'aria':15,'arya':15,
+  'asa':10,'acer':10,
+  'bixby':6,'bixby\'s':6,'big bee':6,
+  'cat':11,'kat':11,'cathy':11,
+  'fino':9,'finot':9,'feno':9,'fenno':9,
+  'hannah':0,'hanna':0,
+  'kalea':13,'kaylee':13,'callie':13,'khalea':13,
+  'keller':2,'keller\'s':2,
+  'lu':14,'lou':14,'lew':14,
+  'lucy':5,'luci':5,
+  'may':12,'mei':12,'mae':12,
+  'nora':1,'norah':1,
+  'raina':4,'reina':4,'rain':4,'rayna':4,
+  'reese':8,'reece':8,
+  'soso':17,'so so':17,'sozo':17
+};
+
+// Stat aliases for voice recognition
+var voiceStatMap={
+  'defensive stop':'Defensive_Stops','defensive stops':'Defensive_Stops','def stop':'Defensive_Stops',
+  'stop':'Defensive_Stops','stops':'Defensive_Stops',
+  'shot stopped':'Shots_Stopped','shots stopped':'Shots_Stopped','shot stop':'Shots_Stopped',
+  'save':'Shots_Stopped','saves':'Shots_Stopped',
+  '50 50':'50/50_Wins','50/50':'50/50_Wins','fifty fifty':'50/50_Wins','5050':'50/50_Wins',
+  'steal':'Steals','steals':'Steals','stolen':'Steals',
+  'shot on goal':'Shots_on_Goal','shot':'Shots_on_Goal','shots on goal':'Shots_on_Goal','sog':'Shots_on_Goal',
+  'assist':'Assists','assists':'Assists',
+  'through ball':'Through_Balls','through balls':'Through_Balls','thru ball':'Through_Balls','through':'Through_Balls',
+  'switch':'Switch_Field','switch field':'Switch_Field','switched':'Switch_Field',
+  'cross':'Crosses','crosses':'Crosses','crossed':'Crosses'
+};
+
+function parseVoiceCommand(text,rawText){
+  // Try to find a player name and stat in the spoken text
+  var foundPlayer=null;
+  var foundStat=null;
+  var isUndo=false;
+
+  // Check for undo/minus
+  if(text.indexOf('undo')>=0||text.indexOf('minus')>=0||text.indexOf('remove')>=0||text.indexOf('subtract')>=0){
+    isUndo=true;
+    text=text.replace(/undo|minus|remove|subtract/g,'').trim();
+  }
+
+  // Try to match player (longest match first)
+  var playerKeys=Object.keys(voicePlayerMap).sort(function(a,b){return b.length-a.length;});
+  for(var i=0;i<playerKeys.length;i++){
+    var pk=playerKeys[i];
+    if(text.indexOf(pk)>=0){
+      foundPlayer=voicePlayerMap[pk];
+      text=text.replace(pk,'').trim();
+      break;
+    }
+  }
+
+  // Try to match stat (longest match first)
+  var statKeys=Object.keys(voiceStatMap).sort(function(a,b){return b.length-a.length;});
+  for(var i=0;i<statKeys.length;i++){
+    var sk=statKeys[i];
+    if(text.indexOf(sk)>=0){
+      foundStat=voiceStatMap[sk];
+      break;
+    }
+  }
+
+  if(foundPlayer!==null&&foundStat){
+    var delta=isUndo?-1:1;
+    chg(foundPlayer,foundStat,delta);
+    var pnameEl=document.querySelector('#pname_'+foundPlayer+' .pname-text');
+    var pname=pnameEl?pnameEl.textContent:'Player '+foundPlayer;
+    document.getElementById('last-voice-cmd').textContent='🎤 "'+rawText+'" → '+pname+' '+(isUndo?'-1':'+1')+' '+foundStat.replace(/_/g,' ');
+  } else {
+    document.getElementById('last-voice-cmd').textContent='🎤 "'+rawText+'" (not recognized)';
+  }
+}
+
+})();
+</script>
 </body></html>
